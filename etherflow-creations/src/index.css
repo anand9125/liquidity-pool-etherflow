@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* DeFi Ethereal Theme */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 7% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 263 70% 50.4%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 263 85% 70%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 263 70% 50.4%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+
+    --warning: 32 95% 44%;
+    --warning-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 263 70% 50.4%;
+
+    --radius: 0.75rem;
+
+    /* DeFi Specific Colors */
+    --ethereum: 217 100% 50%;
+    --ethereum-glow: 217 100% 70%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
+    --gradient-ethereum: linear-gradient(135deg, hsl(var(--ethereum)) 0%, hsl(var(--ethereum-glow)) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    --gradient-border: linear-gradient(135deg, hsl(var(--primary) / 0.5) 0%, hsl(var(--ethereum) / 0.3) 100%);
+    
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
+    --shadow-ethereum: 0 0 30px hsl(var(--ethereum) / 0.4);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+    
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Same as root since we're using dark theme by default */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-image: 
+      radial-gradient(ellipse at top, hsl(var(--primary) / 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, hsl(var(--ethereum) / 0.05) 0%, transparent 50%);
+  }
+
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10;
+    background: var(--gradient-glass);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-ethereum {
+    box-shadow: var(--shadow-ethereum);
+  }
+
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-ethereum {
+    background: var(--gradient-ethereum);
+  }
+
+  .gradient-border {
+    background: var(--gradient-border);
+  }
+
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  .transition-spring {
+    transition: var(--transition-spring);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px hsl(var(--primary) / 0.5); }
+  to { box-shadow: 0 0 30px hsl(var(--primary) / 0.8); }
+}
