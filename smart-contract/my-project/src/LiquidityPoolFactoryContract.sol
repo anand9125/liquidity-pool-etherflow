@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "./Liquidity_Pool.sol";
-import {LPTtoken} from "./LPT.sol";
+import {LiquidityPool} from "./Liquidity_Pool.sol";
+import {LPToken} from "./LPT.sol";
 
 contract LiquidityPoolFactory {
-    address[] public allPools;
+    address[] public allPools; 
     mapping(address => mapping(address => address)) public getPool;
-    mapping(address => PoolInfo[]) public userPools; // user -> array of pool data
+    mapping(address => PoolData[]) public userPools;
+    mapping(address => PoolData) public poolData;
 
-    struct PoolInfo {
+    struct PoolData {
         address poolAddress;
         address token0;
         address token1;
@@ -17,7 +18,7 @@ contract LiquidityPoolFactory {
         uint256 reserve0;
         uint256 reserve1;
     }
-
+    
     event PoolCreated(
         address indexed token0,
         address indexed token1,
@@ -25,42 +26,36 @@ contract LiquidityPoolFactory {
         address lpToken
     );
 
-    function createPool(address token0, address token1)
-        external
-        returns (address)
-    {
+    // Function to create a new liquidity pool
+    function createPool(
+        address token0,
+        address token1
+    ) external returns (address pool) {
         require(token0 != token1, "Tokens must be different");
-        require(token0 != address(0) && token1 != address(0), "Invalid token");
-        require(
-            getPool[token0][token1] == address(0),
-            "Pool already exists"
-        );
+        require(token0 != address(0) && token1 != address(0), "Invalid token addresses");
+        require(getPool[token0][token1] == address(0), "Pool already exists");
 
-        // Deploy LP token
-        LPTtoken lpToken = new LPTtoken();
+   
+        LPToken lpToken = new LPToken();
 
-        // Deploy LiquidityPool contract
         LiquidityPool newPool = new LiquidityPool(
             token0,
             token1,
             address(lpToken)
         );
 
-        // Map pool for both token orders
         getPool[token0][token1] = address(newPool);
-        getPool[token1][token0] = address(newPool);
+        getPool[token1][token0] = address(newPool); 
 
-        // Store all pools
+        
         allPools.push(address(newPool));
 
         emit PoolCreated(token0, token1, address(newPool), address(lpToken));
 
-        // Get reserves (will be 0 initially)
         (uint256 reserve0, uint256 reserve1) = newPool.getReserves();
 
-        // Track in user's pool list
         userPools[msg.sender].push(
-            PoolInfo({
+            PoolData({
                 poolAddress: address(newPool),
                 token0: token0,
                 token1: token1,
@@ -72,15 +67,13 @@ contract LiquidityPoolFactory {
 
         return address(newPool);
     }
-
-    function getPoolsByUser(address user)
-        external
-        view
-        returns (PoolInfo[] memory)
-    {
+    
+    // Function to retrieve all pools created by a specific user
+    function getPoolsByUser(address user) external view returns (PoolData[] memory) {
         return userPools[user];
     }
 
+    // Function to retrieve all pools
     function getAllPools() external view returns (address[] memory) {
         return allPools;
     }

@@ -2,13 +2,13 @@
 pragma solidity ^0.8.13;
 
 import {Test, console} from "../lib/forge-std/src/Test.sol";
-import {LPTtoken} from "../src/LPT.sol";
+import {LPToken} from "../src/LPT.sol";
 
 contract LPTtokenTest is Test {
-    LPTtoken lpt;
+    LPToken lpt;
 
     function setUp() public {
-        lpt = new LPTtoken();
+        lpt = new LPToken();
     }
     function test_mintLPtoken() public {
         lpt.mint(address(this),100);
